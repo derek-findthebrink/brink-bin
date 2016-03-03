@@ -1,13 +1,11 @@
 #!/usr/bin/env coffee
 path = require "path"
 program = require "commander"
-# async = require "async"
-
 
 args = process.argv
-
 env = process.env
-env.MODS = MODS = path.join __dirname, "modules"
+MODS = path.join __dirname, "modules"
+
 traverse = require(MODS + "/traverse")
 pretty = require(MODS + "/pretty-print")
 
@@ -49,7 +47,6 @@ program
 	.command("scripts", "pretty print the scripts of the current project")
 	.command("generate", "generate a brink.json file")
 	.command("create", "create something new")
-	.scripts
 
 done = (err)->
 	if err
