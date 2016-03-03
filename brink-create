@@ -1,0 +1,9 @@
+#!/usr/bin/env coffee
+
+program = require "commander"
+fs = require "fs"
+inquirer = require "inquirer"
+
+program
+	.command("command", "create a new command")
+	.parse(process.argv)

@@ -1,0 +1,112 @@
+#!/usr/bin/env coffee
+p = require "commander"
+path = require "path"
+fs = require "fs"
+async = require "async"
+
+traverse = require "./modules/traverse"
+
+args = process.argv
+p
+	.option("-o, --out <path>", "specify an outpath, defaults to './brink.json'")
+	.parse(args)
+
+input = {}
+input.out = p.out || "brink.json"
+
+# should output in a js-parsable format -> e.g. pm2 ecosystem
+
+# generate template -> scaffolding for all of the other commands
+template = {
+	languages:
+		data:
+			client: "coffee"
+			server: "coffee"
+		ui:
+			client: "cjsx"
+			server: "cjsx"
+	features:
+		tasks:
+			enabled: true
+		test:
+			enabled: true
+		config:
+			enabled: true
+		assets:
+			enabled: true
+		dumps:
+			enabled: true
+		logs:
+			enabled: true
+		scratch:
+			enabled: true
+		ui:
+			enabled: true
+		views:
+			enabled: true
+		api:
+			enabled: true
+	api:
+		server:
+			folder: "api"
+			files: null
+			models: 
+				name: "models"
+				base: "_base"
+				index: "index"
+			controllers: 
+				name: "controllers"
+			routes:
+				name: "routes"
+			services:
+				name: "services"
+			policies:
+				name: "policies"
+		client:
+			folder: "ui/js"
+			files:
+				router:
+					name: "router"
+				index:
+					name: "index"
+			models:
+				name: "models"
+				base: "_base"
+				index: "index"
+			controllers:
+				name: "controllers"
+			services:
+				name: "services"
+}
+
+writeConfig = (data, p, cb)->
+	console.log {path: p, data: data}
+	final = JSON.stringify(data, null, "\t")
+	fs.writeFileSync(p, final, {encoding: "utf8"}, (err)->
+		if err
+			return cb(err)
+		return cb(null, data, p)
+		)
+
+createTemplate = (p, file, cb)->
+	i = input
+	# match input -o with p
+	brinkPath = p + "/" + i.out
+
+	t = template
+	return cb(null, t, brinkPath)
+
+async.waterfall([
+	# find project root
+	traverse
+	# check if brink.json exists
+	# questions for interactive shoud all have default opt as defaults
+	createTemplate
+	# output brink.json to requested path
+	writeConfig
+	# add brink: <path> to package.json
+	], (err, data, p)->
+		if err
+			return console.error err
+		return console.log template: data, path: p
+		)

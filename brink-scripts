@@ -1,0 +1,68 @@
+#!/usr/bin/env coffee
+
+path = require "path"
+fs = require "fs"
+colors = require "colors"
+_ = require "underscore"
+
+count = 0
+limit = 6
+
+printOpts = {
+	rightPadding: 5
+	leftPadding: 4
+}
+
+c = {
+	key: "blue"
+	val: "green"
+}
+
+searchUp = (npath, file)->
+	tpath = path.join npath, file
+	fs.stat(tpath, (err, stat)->
+		if err
+			if count < limit
+				count++
+				newPath = path.join npath, "../"
+				return searchUp(newPath, file)
+			return console.error("could not find file within %s traverses", count)
+		if stat.isFile()
+			return printScripts(npath, file)
+		)
+
+printScripts = (cpath, file)->
+	pckg = require( path.join cpath, file )
+	scripts = pckg.scripts
+	return prettyPrint(scripts)
+
+prettyPrint = (txt)->
+	generatePadding = (num)->
+		pstr = ""
+		while num >= 0
+			pstr+= " "
+			num--
+		return pstr
+	log = (key, val, color, opts)->
+		lPad = generatePadding(opts.leftPadding)
+		rPad = generatePadding(opts.maxPad - key.length)
+		str = [lPad, key[color.key].bold, rPad, val[color.val]].join("")
+		return console.log str
+	getMaxPadding = (t, opts)->
+		arr = []
+		_.map(t, (val, key)->
+			arr.push(key.length)
+			)
+		return _.max(arr) + opts.rightPadding
+
+	printOpts.maxPad = getMaxPadding(txt, printOpts)
+	console.log ""
+	_.each txt, (v, k, list)->
+		log(k, v, c, printOpts)
+	console.log ""
+
+
+cwd = process.cwd()
+f = "package.json"
+
+searchUp(cwd, f)

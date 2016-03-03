@@ -1,0 +1,79 @@
+#!/usr/bin/env coffee
+path = require "path"
+program = require "commander"
+# async = require "async"
+
+
+args = process.argv
+
+env = process.env
+env.MODS = MODS = path.join __dirname, "modules"
+traverse = require(MODS + "/traverse")
+pretty = require(MODS + "/pretty-print")
+
+commands = [
+	{
+		name: "scripts"
+		description: ""
+	}
+	{
+		name: "packages"
+		description: ""
+	}
+	{
+		name: "dev"
+		description: ""
+	}
+	{
+		name: "command"
+		description: ""
+	}
+	{
+		name: "create"
+		description: ""
+	}
+	{
+		name: "generate"
+		description: ""
+	}
+	{
+		name: "new"
+		description: ""
+	}
+]
+
+
+program
+	.version("0.1.0")
+	.option("-i, --interactive", "use interactive mode")
+	.command("scripts", "pretty print the scripts of the current project")
+	.command("generate", "generate a brink.json file")
+	.command("create", "create something new")
+	.scripts
+
+done = (err)->
+	if err
+		console.error err
+		return process.exit(1)
+	return process.exit(0)
+
+program.on("--help", ->
+	console.log "commands:"
+	console.log "scripts, packages, dev"
+	console.log "\n"
+	)
+
+program.parse(args)
+
+# console.log {args: args}
+if program.interactive
+	console.log "okay, interactive mode!"
+
+findRoot = ->
+	traverse((err, path)->
+		if err
+			console.log msg
+			return done(err)
+		pRoot = path
+		console.log projectRoot: pRoot
+		)

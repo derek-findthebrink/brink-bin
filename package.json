@@ -1,0 +1,32 @@
+{
+  "name": "brink-bin",
+  "version": "0.1.0",
+  "description": "dev kit for brink technology co.",
+  "main": "brink",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
+    "inquirer": "^0.12.0",
+    "pretty-print": "^1.1.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/findthebrink/brink-bin.git"
+  },
+  "author": "Brink Technology Co.",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/findthebrink/brink-bin/issues"
+  },
+  "homepage": "https://github.com/findthebrink/brink-bin#readme"
+}
