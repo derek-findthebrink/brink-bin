@@ -9,14 +9,14 @@ async = require "async"
 traverse = require "./modules/traverse"
 prettyPrint = require "./modules/pretty-print"
 
-getScripts = (cpath, file, cb)->
+getPackages = (cpath, file, cb)->
 	pckg = require( path.join cpath, file )
-	scripts = pckg.scripts
-	return cb(null, scripts)
+	packages = pckg.dependencies
+	return cb(null, packages)
 
 async.waterfall([
 	traverse
-	getScripts
+	getPackages
 	prettyPrint
 	], (err)->
 		if err

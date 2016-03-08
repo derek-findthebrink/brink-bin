@@ -12,12 +12,15 @@
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "inquirer": "^0.12.0",
+    "mongoose": "^4.4.6",
     "pretty-print": "^1.1.0",
     "underscore": "^1.8.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers coffee:coffee-script --require coffee-script/register"
   },
   "repository": {
     "type": "git",

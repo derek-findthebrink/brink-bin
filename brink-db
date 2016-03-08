@@ -1,0 +1,87 @@
+#!/usr/bin/env coffee
+
+program = require "commander"
+fs = require "fs"
+nodepath = require "path"
+inquirer = require "inquirer"
+_ = require "underscore"
+async = require "async"
+prettyPrint = require "./modules/pretty-print"
+
+# this program accesses the local copy of config/db(*database)
+# and prompts for dump/stats on the available db's in the conf
+# file
+
+program
+	.parse(process.argv)
+
+# find the local config.db file
+# extract database entries
+# (mongodb) connect to database and
+# perform required operations
+
+# traverse to root
+# find dir: config
+# find file: database
+# read file
+
+traverse = require "./modules/traverse"
+
+done = (err)->
+	if err
+		throw err
+	process.exit(0)
+
+
+traverse (err, path, file)->
+	process.chdir(path)
+	dbpath = nodepath.join(path, "./config/database.coffee")
+
+	dbconf = require dbpath
+	mongoose = dbconf.mongoose
+
+	count = (model, cb)->
+		schema = mongoose.model(model)
+		schema.count {}, (err, c)->
+			if err
+				return cb(err)
+			x = {
+				name: model
+				count: c
+			}
+			return cb(null, x)
+
+	# list each environment and prompt on list
+	choices = []
+	_.each(dbconf, (val, key)->
+		return choices.push(key)
+		)
+	
+	dbchoice = {
+		name: "db"
+		type: "list"
+		choices: choices
+		message: "which db would you like to use?"
+	}
+	operation = {
+		name: "op"
+		type: "list"
+		choices: ["count", "flush"]
+		message: "what would you like to do?"
+	}
+
+	inquirer.prompt [dbchoice, operation], (q)->
+		mongoose.connect dbconf[q.db].url, (err)->
+			cols = mongoose.modelNames()
+			async.map cols, count, (err, results)->
+				if err
+					return done(err)
+				# for count operation
+				r = {}
+				_.map results, (x)->
+					r[x.name] = x.count
+				console.log "\n", q.db
+				prettyPrint r, (err)->
+					if err
+						return done(err)
+					return done(null)

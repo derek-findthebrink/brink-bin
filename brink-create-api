@@ -1,0 +1,68 @@
+#!/usr/bin/env coffee
+
+program = require "commander"
+fs = require "fs"
+_ = require "underscore"
+nodepath = require "path"
+async = require "async"
+
+traverse = require "./modules/traverse"
+done = require "./modules/done"
+fsMaker = require "./modules/fs-maker"
+
+
+# sample command
+# ----------------
+# brink create api song
+# - create server file named song.coffee in api/models
+# - create ui file named song.coffee in ui/models
+
+program
+	.parse(process.argv)
+
+args = {}
+apis = program.args
+
+# process:
+# - traverse to project root
+# - find brink.json file
+# - construct required arguments for fs creator
+# - run scripts
+# - return any errors, else report success
+
+setup = (path, file, cb)->
+	brink = require nodepath.join(path, "./brink.json")
+	# get api options for server
+	files = []
+	_.map apis, (x)->
+		client = {
+			name: x
+			type: "client"
+			path: path
+			config: brink
+			}
+		server = {
+			name: x
+			type: "server"
+			path: path
+			config: brink
+		}
+		files.push(client, server)
+	t = files[0]
+
+	# remove in production
+	return cb(null, files)
+
+makeFiles = (files, cb)->
+	goMakeFiles = (f, cb)->
+		fsMaker(f, cb)
+	async.map files, goMakeFiles, (err, made)->
+		return cb(err, made)
+
+async.waterfall([
+	traverse
+	setup
+	makeFiles
+	], (err, results)->
+		return done(err, results)
+		)

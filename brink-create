@@ -5,5 +5,7 @@ fs = require "fs"
 inquirer = require "inquirer"
 
 program
-	.command("command", "create a new command")
+	.command("api <name>", "create new api")
+	.command("module <name>", "create new module")
+	.command("service <name>", "create new service")
 	.parse(process.argv)

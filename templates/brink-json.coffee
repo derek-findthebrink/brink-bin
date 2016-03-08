@@ -1,5 +1,5 @@
-{
-	"root": "./test-app",
+template = {
+	"root": "."
 	"languages": {
 		"data": {
 			"client": "coffee",
@@ -88,3 +88,5 @@
 		}
 	}
 }
+
+module.exports = template
