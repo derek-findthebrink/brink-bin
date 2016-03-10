@@ -1,92 +1,79 @@
 template = {
-	"root": "."
-	"languages": {
-		"data": {
+	root: "."
+	languages:
+		data:
 			"client": "coffee",
 			"server": "coffee"
-		},
-		"ui": {
+		ui:
 			"client": "cjsx",
 			"server": "cjsx"
-		}
-	},
-	"features": {
-		"tasks": {
+	features:
+		tasks:
 			"enabled": true
-		},
-		"test": {
+		test:
 			"enabled": true
-		},
-		"config": {
+		config:
 			"enabled": true
-		},
-		"assets": {
+		assets:
 			"enabled": true
-		},
-		"dumps": {
+		dumps:
 			"enabled": true
-		},
-		"logs": {
+		logs:
 			"enabled": true
-		},
-		"scratch": {
+		scratch:
 			"enabled": true
-		},
-		"ui": {
+		ui:
 			"enabled": true
-		},
-		"views": {
+		views:
 			"enabled": true
-		},
-		"api": {
+		api:
 			"enabled": true
-		}
-	},
-	"api": {
-		"server": {
-			"folder": "api",
-			"files": null,
-			"models": {
-				"name": "models",
-				"base": "_base",
-				"index": "index"
-			},
-			"controllers": {
-				"name": "controllers"
-			},
-			"routes": {
-				"name": "routes"
-			},
-			"services": {
-				"name": "services"
-			},
-			"policies": {
-				"name": "policies"
-			}
-		},
-		"client": {
-			"folder": "ui/js",
-			"files": {
-				"router": {
-					"name": "router"
-				},
-				"index": {
-					"name": "index"
-				}
-			},
-			"models": {
-				"name": "models",
-				"base": "_base",
-				"index": "index"
-			},
-			"controllers": {
-				"name": "controllers"
-			},
-			"services": {
-				"name": "services"
-			}
-		}
-	}
+	scaffold:
+		api:
+			controllers: null
+			models:
+				"files": ["_base"]
+			policies: null
+			routes: null
+			services: null
+		assets:
+			lib: null
+		config:
+			"files": ["database"]
+		docs: null
+		dumps: null
+		logs: null
+		scratch: null
+		tasks: null
+		test: null
+		ui:
+			js: null
+			css:
+				"files": ["index", "_base", "_config"]
+				layouts: null
+				modules: null
+		views:
+			modules:
+				"files": ["_nav", "_header", "_footer"]
+			pages:
+				"files": ["home", "_template"]
+			"files": ["_layout"]
+	api:
+		server:
+			"folder": "api"
+			"files": null
+			models:
+				"files": ["_base", "index"]
+			controllers: ["_base"]
+			routes: null
+			services: null
+			politices: null
+		client:
+			"folder": "ui/js"
+			"files": ["router", "index"]
+			models: ["_base", "index"]
+			controllers: null
+			services: null
 }
 
 module.exports = template
