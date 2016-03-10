@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 p = require "commander"
-path = require "path"
+nodepath = require "path"
 fs = require "fs"
 async = require "async"
 
@@ -19,18 +19,18 @@ input.out = p.out || "brink.json"
 # generate template -> scaffolding for all of the other commands
 template = require "./templates/brink-json"
 
-writeConfig = (data, p, cb)->
+writeConfig = (data, path, cb)->
 	final = JSON.stringify(data, null, "\t")
-	fs.writeFile(p, final, {encoding: "utf8"}, (err)->
+	fs.writeFile(path, final, {encoding: "utf8"}, (err)->
 		if err
 			return cb(err)
-		return cb(null, data, p)
+		return cb(null, data, path)
 		)
 
-createTemplate = (p, file, cb)->
+createTemplate = (path, file, pckg, brink, cb)->
 	i = input
 	# match input -o with p
-	brinkPath = p + "/" + i.out
+	brinkPath = path + "/" + i.out
 
 	t = template
 	return cb(null, t, brinkPath)

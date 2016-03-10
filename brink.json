@@ -1,5 +1,5 @@
 {
-	"root": "./test-app",
+	"root": "test-app",
 	"languages": {
 		"data": {
 			"client": "coffee",
@@ -40,6 +40,62 @@
 		},
 		"api": {
 			"enabled": true
+		}
+	},
+	"scaffold": {
+		"api": {
+			"controllers": null,
+			"models": {
+				"files": [
+					"_base"
+				]
+			},
+			"policies": null,
+			"routes": null,
+			"services": null
+		},
+		"assets": {
+			"lib": null
+		},
+		"config": {
+			"files": [
+				"database"
+			]
+		},
+		"docs": null,
+		"dumps": null,
+		"logs": null,
+		"scratch": null,
+		"tasks": null,
+		"test": null,
+		"ui": {
+			"js": null,
+			"css": {
+				"files": [
+					"index",
+					"_base",
+					"_config"
+				],
+				"layouts": null,
+				"modules": null
+			}
+		},
+		"views": {
+			"modules": {
+				"files": [
+					"_nav",
+					"_header",
+					"_footer"
+				]
+			},
+			"pages": {
+				"files": [
+					"home"
+				]
+			},
+			"files": [
+				"_layout"
+			]
 		}
 	},
 	"api": {

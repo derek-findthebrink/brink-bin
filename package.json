@@ -11,7 +11,10 @@
     "async": "^1.5.2",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
+    "fs-extra": "^0.26.5",
     "inquirer": "^0.12.0",
+    "lodash": "^4.6.1",
+    "mkdirp": "^0.5.1",
     "mongoose": "^4.4.6",
     "pretty-print": "^1.1.0",
     "underscore": "^1.8.3"
@@ -31,5 +34,6 @@
   "bugs": {
     "url": "https://github.com/findthebrink/brink-bin/issues"
   },
-  "homepage": "https://github.com/findthebrink/brink-bin#readme"
+  "homepage": "https://github.com/findthebrink/brink-bin#readme",
+  "brink": "brink.json"
 }

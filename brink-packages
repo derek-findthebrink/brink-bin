@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-path = require "path"
+nodepath = require "path"
 fs = require "fs"
 colors = require "colors"
 _ = require "underscore"
@@ -9,8 +9,7 @@ async = require "async"
 traverse = require "./modules/traverse"
 prettyPrint = require "./modules/pretty-print"
 
-getPackages = (cpath, file, cb)->
-	pckg = require( path.join cpath, file )
+getPackages = (path, file, pckg, brink, cb)->
 	packages = pckg.dependencies
 	return cb(null, packages)
 
