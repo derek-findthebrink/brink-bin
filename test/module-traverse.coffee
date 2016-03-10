@@ -7,7 +7,7 @@ _ = require "underscore"
 
 traverse = require "../modules/traverse"
 
-describe "module-traverse", ->
+describe "module: traverse", ->
 	it "should traverse to the nearest package.json"
 	it "should provide the brink.json file and the package.json file"
 	it "should throw an error if they are not found"
