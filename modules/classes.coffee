@@ -1,5 +1,6 @@
 nodepath = require "path"
 
+# i = name
 class APIFileOptions
 	constructor: (i, type, path, config)->
 		# console.log arguments:arguments

@@ -36,11 +36,17 @@ go = (cb)->
 	f = "package.json"
 	async.waterfall([
 		async.apply(searchUp, cwd, f)
-		], (err, p, file)->
+		], (err, path, file)->
 			count = 0
 			if err
 				return parseErr(err, cb)
-			return cb(null, p, file)
+			# add stronger error handling for not finding either of below
+			rootPath = nodepath.join path
+			pckg = require nodepath.join rootPath, "package.json"
+			brink = require nodepath.join rootPath, pckg.brink || null
+			process.chdir(path)
+			# path returns the root dir of package.json
+			return cb(null, path, file, pckg, brink)
 			)
 
 module.exports = go
