@@ -1,14 +1,11 @@
 {
-	"root": "test-app",
+	"root": "./test-app",
 	"languages": {
-		"data": {
-			"client": "coffee",
-			"server": "coffee"
-		},
-		"ui": {
-			"client": "cjsx",
-			"server": "cjsx"
-		}
+		"api": "coffee",
+		"ui": "cjsx",
+		"views": "jade",
+		"css": "sass",
+		"default": "coffee"
 	},
 	"features": {
 		"tasks": {
@@ -43,6 +40,9 @@
 		}
 	},
 	"scaffold": {
+		"files": [
+			"app"
+		],
 		"api": {
 			"controllers": null,
 			"models": {
@@ -69,7 +69,14 @@
 		"tasks": null,
 		"test": null,
 		"ui": {
-			"js": null,
+			"js": {
+				"files": [
+					"index"
+				],
+				"models": null,
+				"views": null,
+				"utilities": null
+			},
 			"css": {
 				"files": [
 					"index",
@@ -77,7 +84,8 @@
 					"_config"
 				],
 				"layouts": null,
-				"modules": null
+				"modules": null,
+				"services": null
 			}
 		},
 		"views": {
@@ -90,7 +98,8 @@
 			},
 			"pages": {
 				"files": [
-					"home"
+					"home",
+					"_template"
 				]
 			},
 			"files": [
@@ -103,44 +112,30 @@
 			"folder": "api",
 			"files": null,
 			"models": {
-				"name": "models",
-				"base": "_base",
-				"index": "index"
+				"files": [
+					"_base",
+					"index"
+				]
 			},
-			"controllers": {
-				"name": "controllers"
-			},
-			"routes": {
-				"name": "routes"
-			},
-			"services": {
-				"name": "services"
-			},
-			"policies": {
-				"name": "policies"
-			}
+			"controllers": [
+				"_base"
+			],
+			"routes": null,
+			"services": null,
+			"politices": null
 		},
 		"client": {
 			"folder": "ui/js",
-			"files": {
-				"router": {
-					"name": "router"
-				},
-				"index": {
-					"name": "index"
-				}
-			},
-			"models": {
-				"name": "models",
-				"base": "_base",
-				"index": "index"
-			},
-			"controllers": {
-				"name": "controllers"
-			},
-			"services": {
-				"name": "services"
-			}
+			"files": [
+				"router",
+				"index"
+			],
+			"models": [
+				"_base",
+				"index"
+			],
+			"controllers": null,
+			"services": null
 		}
 	}
 }

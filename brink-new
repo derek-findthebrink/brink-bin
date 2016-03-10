@@ -12,6 +12,7 @@ async = require "async"
 
 traverse = require "./modules/traverse"
 done = require "./modules/done"
+inquire = require "./modules/inquire"
 
 # logic
 # -----------------------
@@ -35,6 +36,9 @@ checkDir = (opts, path, file, pckg, brink, cb)->
 	out = opts.out
 	dir = nodepath.join path, out
 	fs.stat(dir, (err, stat)->
+		conf = {}
+		conf.package = pckg
+		conf.brink = brink
 		if stat
 			# add more details here for how to solve error
 			e = new Error("Already exists!")
@@ -43,9 +47,6 @@ checkDir = (opts, path, file, pckg, brink, cb)->
 			# console.log err:err
 			# good to go!
 			if err.code == "ENOENT"
-				conf = {}
-				conf.package = pckg
-				conf.brink = brink
 				return cb(null, conf)
 		e = new Error("Unable to parse..")
 		return cb(e)
@@ -55,61 +56,102 @@ createScaffold = (opts, config, cb)->
 	# use brink to generate scaffold
 	brink = config.brink
 	root = nodepath.join process.cwd(), brink.root
-
 	scaffold = brink.scaffold
 	# create all directories required
 	# <br /> holder for all
 	dirs = []
 	files = []
 	addDir = (obj, c)->
+		# console.log languages:languages
 		root = obj.root
 		i = obj.tree
 		_.forOwn i, (val, key)->
-			if key == "files"
-				_.map val, (x)->
-					f = nodepath.join root, x
-					return files.push(f)
-				return
+			# if key == "files"
+			# 	parents = root.split("/")
+			# 	# console.log parents:parents
+			# 	type = languages.default
+			# 	itr = parents.length - 1
+			# 	while itr > 0
+			# 		target = parents[itr]
+			# 		if languages[target]
+			# 			type = languages[target]
+			# 			itr = 0
+			# 		itr--
+			# 	_.map val, (x)->
+			# 		f = nodepath.join root, [x, type].join(".")
+			# 		return files.push(f)
 
+			if key == "files"
+				return
 			newRoot = root + "/" + key
-			if  _.isObject val
-				queue.push({tree: val, root:newRoot})
-			else
+			if (val == null)
 				dirs.push(newRoot)
+			else if (_.isObject val)
+				dirs.push(newRoot)
+				queue.push({tree: val, root:newRoot})
 
 		return c(null)
 	queue = async.queue(addDir, 1)
 	# callback
 	queue.drain = ->
-		console.log dirs:dirs
-		console.log files:files
-		return cb(null, dirs, files)
+		return cb(null, config, dirs)
 	# initiate
 	queue.push({tree:scaffold, root: root})
 
 
-createDirs = (dirs, files, cb)->
-	_createDirs = (x)->
-		dir = nodepath.join x
-		return fs.ensureDir(dir, cb)
-
+createDirs = (config, dirs, cb)->
 	if _.isArray dirs
-		async.map dirs, _createDirs, (err)->
-			return cb(err)
+		async.map dirs, fs.ensureDir, (err)->
+			return cb(err, config, dirs)
 	if _.isString dirs
-		return fs.ensureDir(dirs, cb)
+		return fs.ensureDir(dirs, (err)->
+			return cb(err, config, dirs)
+			)
 
-createFiles = (cb)->
-	return cb(null)
+createFiles = (config, dirs, cb)->
+	brink = config.brink
+	scaffold = brink.scaffold
+	root = nodepath.join process.cwd(), brink.root
+	languages = brink.languages
+	files = []
+	addFile = (obj, c)->
+		root = obj.root
+		i = obj.tree
+		_.forOwn i, (val, key)->
+			if key == "files"
+				parents = root.split("/")
+				# console.log parents:parents
+				type = languages.default
+				itr = parents.length - 1
+				while itr > 0
+					target = parents[itr]
+					if languages[target]
+						type = languages[target]
+						itr = 0
+					itr--
+				_.map val, (x)->
+					f = nodepath.join root, [x, type].join(".")
+					return files.push(f)
+			newRoot = [root, key].join("/")
+			if _.isObject val
+				queue.push({tree: val, root: newRoot})
+		return c(null)
+	queue = async.queue(addFile, 1)
+	queue.drain = ->
+		console.log files:files
+		async.map files, fs.ensureFile, (err)->
+			return cb(null, dirs, files)
+	queue.push({tree: scaffold, root: root})
 
 createProject = (opts)->
 	async.waterfall([
 		traverse
 		async.apply checkDir, opts
 		async.apply createScaffold, opts
-		# createDirs
-		# createFiles
+		createDirs
+		createFiles
 		], done)
+
 
 
 

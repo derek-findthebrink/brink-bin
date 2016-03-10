@@ -1,12 +1,13 @@
+dflt = "coffee"
+
 template = {
-	root: "."
+	root: "./test-app"
 	languages:
-		data:
-			"client": "coffee",
-			"server": "coffee"
-		ui:
-			"client": "cjsx",
-			"server": "cjsx"
+		api: dflt
+		ui: "cjsx"
+		views: "jade"
+		css: "sass"
+		default: dflt
 	features:
 		tasks:
 			"enabled": true
@@ -29,6 +30,7 @@ template = {
 		api:
 			"enabled": true
 	scaffold:
+		files: ["app"]
 		api:
 			controllers: null
 			models:
@@ -47,11 +49,16 @@ template = {
 		tasks: null
 		test: null
 		ui:
-			js: null
+			js:
+				"files": ["index"]
+				models: null
+				views: null
+				utilities: null
 			css:
 				"files": ["index", "_base", "_config"]
 				layouts: null
 				modules: null
+				services: null
 		views:
 			modules:
 				"files": ["_nav", "_header", "_footer"]
